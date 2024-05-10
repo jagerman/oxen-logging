@@ -2,10 +2,18 @@
 
 #include <spdlog/sinks/dist_sink.h>
 
+#include <iostream>
+
 namespace oxen::log {
 
+auto debug_make_master_sink() {
+    auto ms = std::make_shared<spdlog::sinks::dist_sink_mt>();
+    std::cerr << "\n\nOXEN-LOGGING MADE MASTER SINK @ " << (void*)ms.get() << "\n\n";
+    return ms;
+}
+
 const std::shared_ptr<spdlog::sinks::dist_sink_mt> CategoryLogger::master_sink =
-        std::make_shared<spdlog::sinks::dist_sink_mt>();
+        debug_make_master_sink();
 
 std::unordered_map<std::string, logger_ptr> CategoryLogger::loggers_;
 std::mutex CategoryLogger::loggers_mutex_;
