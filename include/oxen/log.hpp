@@ -18,10 +18,6 @@ namespace oxen::log {
 
 using logger_ptr = std::shared_ptr<spdlog::logger>;
 
-// Our master sink where all log output goes; we add sub-sinks into this as desired, but this
-// master sink stays around forever.
-extern std::shared_ptr<spdlog::sinks::dist_sink_mt> master_sink;
-
 // Function-like logging statements.  These are structs for technical reasons, but are meant to be
 // used as if functions: all of the logging involved happens in the constructor.
 

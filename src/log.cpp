@@ -27,15 +27,11 @@ namespace {
     // Custom log formatting flag that prints the elapsed time since startup
     class startup_elapsed_flag : public spdlog::custom_flag_formatter {
       private:
-#if OXEN_LOGGING_CPLUSPLUS >= 202002L
         static constexpr fmt::format_string<
                 std::chrono::hours::rep,
                 std::chrono::minutes::rep,
                 std::chrono::seconds::rep,
                 std::chrono::milliseconds::rep>
-#else
-        static constexpr std::string_view
-#endif
                 format_hours{"+{0:d}h{1:02d}m{2:02d}.{3:03d}s"},  // >= 1h
                 format_minutes{"+{1:d}m{2:02d}.{3:03d}s"},        // >= 1min
                 format_seconds{"+{2:d}.{3:03d}s"};                // < 1min
@@ -156,12 +152,12 @@ Level get_level(std::string cat_name) {
 }
 
 void flush() {
-    master_sink->flush();
+    CategoryLogger::master_sink->flush();
 }
 
 void add_sink(spdlog::sink_ptr sink, std::optional<std::string> pattern) {
     set_sink_format(sink, std::move(pattern));
-    master_sink->add_sink(std::move(sink));
+    CategoryLogger::master_sink->add_sink(std::move(sink));
 }
 
 void add_sink(Type type, std::string_view target, std::optional<std::string> pattern) {
@@ -169,7 +165,7 @@ void add_sink(Type type, std::string_view target, std::optional<std::string> pat
 }
 
 void clear_sinks() {
-    master_sink->set_sinks({});
+    CategoryLogger::master_sink->set_sinks({});
 }
 
 }  // namespace oxen::log
